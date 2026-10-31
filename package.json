@@ -1,0 +1,43 @@
+{
+  "name": "the-first-gym",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Website for The First Gym in Zagazig: classes and timetable, coaches, membership with a plan finder, body calculators and directions, in English and Arabic.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@fontsource-variable/big-shoulders-display": "5.3.0",
+    "@fontsource-variable/readex-pro": "5.3.0",
+    "@fontsource-variable/reem-kufi": "5.3.0",
+    "@react-three/fiber": "9.8.2",
+    "lucide-react": "1.66.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-router": "7.18.5",
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "@testing-library/jest-dom": "6.10.0",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.8",
+    "@vitejs/plugin-react": "5.2.0",
+    "eslint": "9.39.5",
+    "eslint-plugin-react-hooks": "5.2.0",
+    "eslint-plugin-react-refresh": "0.4.26",
+    "globals": "16.5.0",
+    "jsdom": "26.1.0",
+    "vite": "7.3.7",
+    "vitest": "5.0.5"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

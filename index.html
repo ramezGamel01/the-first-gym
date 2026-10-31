@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>The First Gym, Zagazig</title>
+    <meta name="description" content="The First Gym in Hay El Mostasharin, Zagazig: strength and cardio machines, classes for men, women and kids, sauna and steam, InBody scans and coaches on the floor. Open 7 days a week." />
+    <meta name="theme-color" content="#000000" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="The First Gym, Zagazig" />
+    <meta property="og:description" content="Train hard. Get results. No excuses. Classes, coaches and membership at The First Gym in Zagazig." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- This script's hash is allowed in vercel.json's Content-Security-Policy; src/test/csp.test.js checks they match -->
+    <script>
+      // Apply the saved language, theme and motion setting before the first paint
+      (function () {
+        try {
+          var d = document.documentElement;
+          var lang = localStorage.getItem("firstgym:lang");
+          if (lang === "ar" || (!lang && /^ar\b/i.test(navigator.language || ""))) { d.lang = "ar"; d.dir = "rtl"; }
+          if (localStorage.getItem("firstgym:theme") === "light") d.dataset.theme = "light";
+          var motion = localStorage.getItem("firstgym:motion");
+          if (motion === "off" || (!motion && matchMedia("(prefers-reduced-motion: reduce)").matches)) d.classList.add("no-motion");
+        } catch (e) {}
+      })();
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HealthClub",
+        "name": "The First Gym",
+        "telephone": "+201155017245",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "End of El Salam Street, opposite the Delta Heart and Catheterization Center, Hay El Mostasharin",
+          "addressLocality": "Zagazig",
+          "addressRegion": "Sharqia",
+          "addressCountry": "EG"
+        },
+        "geo": { "@type": "GeoCoordinates", "latitude": 30.5928708, "longitude": 31.4809817 },
+        "sameAs": ["https://www.facebook.com/TheFirstGym1", "https://www.instagram.com/thefirst_gym"]
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>The First Gym's website needs JavaScript. Call 011 5501 7245 or find the gym on Facebook: facebook.com/TheFirstGym1</noscript>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
