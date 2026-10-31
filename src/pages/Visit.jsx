@@ -3,6 +3,8 @@ import { useI18n, usePageTitle } from "../i18n/context.js";
 import { FAQ, GYM } from "../data/gym.js";
 import { directionsHref, facebookHref, instagramHref, mapsHref, telHref, whatsappHref } from "../lib/contact.js";
 import Hours from "../components/Hours.jsx";
+import PageHead from "../components/PageHead.jsx";
+import { PAGE_PHOTOS } from "../lib/photos.js";
 import { ExtLink } from "../components/bits.jsx";
 
 export default function Visit() {
@@ -12,12 +14,7 @@ export default function Visit() {
 
   return (
     <>
-      <header className="page-head">
-        <div className="shell">
-          <h1 tabIndex={-1}>{t("visit.title")}</h1>
-          <p>{t("visit.lede")}</p>
-        </div>
-      </header>
+      <PageHead title={t("visit.title")} lede={t("visit.lede")} photo={PAGE_PHOTOS.visit} />
 
       <section className="section" aria-label={t("visit.address")}>
         <div className="shell visit">

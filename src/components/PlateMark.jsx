@@ -9,11 +9,10 @@ export default function PlateMark({
   arcTop = "THE FIRST GYM",
   arcBottom = "YOUR FIRST PLACE TO BE A HERO",
   detail = true,
-  arabic = false,
 }) {
   const uid = useId().replace(/[^\w-]/g, "");
   return (
-    <svg viewBox="0 0 200 200" className={`plate ${arabic ? "plate--ar" : ""} ${className}`} aria-hidden="true" focusable="false">
+    <svg viewBox="0 0 200 200" className={`plate ${className}`} aria-hidden="true" focusable="false">
       <defs>
         <radialGradient id={`${uid}r`} cx="36%" cy="30%" r="78%">
           <stop offset="0" stopColor="#2c2c2c" />

@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router";
 import "@fontsource-variable/big-shoulders-display";
 import "@fontsource-variable/readex-pro";
-import "@fontsource-variable/reem-kufi";
+import "@fontsource-variable/alexandria";
 import "./styles/base.css";
 import App from "./App.jsx";
 

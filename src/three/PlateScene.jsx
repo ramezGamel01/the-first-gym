@@ -1,5 +1,5 @@
-// The home page hero: a black bumper plate stamped "1 ST", lit by yellow strips like the
-// LED lines in the gym, rolling in once and then turning slowly toward the pointer.
+// The gym's plate in 3D for the hero's glass card: a black bumper plate stamped "1 ST", lit by
+// yellow strips like the LED lines in the gym, swaying slowly and leaning toward the pointer.
 import { useEffect, useMemo, useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
@@ -135,7 +135,7 @@ function StudioLights({ side }) {
     strip("#ffffff", 1.3, [6, 3], [-4.5, 1.5, 5]);
     strip(YELLOW, 5, [0.25, 10], [-2.6, 0, 6.5]);
     strip("#ffffff", 2.4, [5, 3], [3, 2.5, 6]);
-    strip("#38d6ee", 1.8, [9, 0.25], [0, -4, 2]);
+    strip("#ff8a2a", 2, [9, 0.25], [0, -4, 2]);
 
     const pmrem = new THREE.PMREMGenerator(gl);
     const target = pmrem.fromScene(env, 0.035);
@@ -151,37 +151,16 @@ function StudioLights({ side }) {
   return null;
 }
 
-// Where the hero's plate placeholder sits inside the canvas, as fractions of the canvas size
-function useStageLayout(stage) {
-  const gl = useThree((s) => s.gl);
-  const layout = useRef(null);
-  const measure = () => {
-    const c = gl.domElement.getBoundingClientRect();
-    const s = stage.current?.getBoundingClientRect();
-    if (!s || !c.width || !c.height) return;
-    layout.current = {
-      x: (s.left + s.width / 2 - c.left) / c.width,
-      y: (s.top + s.height / 2 - c.top) / c.height,
-      size: s.height / c.height,
-    };
-  };
-  return { layout, measure };
-}
-
-function Plate({ stage, motion, side, onReady }) {
+function Plate({ motion, side, onReady }) {
   const tilt = useRef(null);
-  const spin = useRef(null);
   const face = useFaceTexture();
   const rubber = useMemo(() => new THREE.LatheGeometry(rounded(RUBBER, 0.03), 180), []);
   const steel = useMemo(() => new THREE.LatheGeometry(rounded(STEEL, 0.015), 120), []);
   useEffect(() => () => [rubber, steel].forEach((g) => g.dispose()), [rubber, steel]);
 
   const pointer = useRef({ x: 0, y: 0 });
-  const intro = useRef(motion ? 0 : 1);
-  const idle = useRef(0);
+  const time = useRef(0);
   const reported = useRef(false);
-  const frames = useRef(0);
-  const { layout, measure } = useStageLayout(stage);
 
   useEffect(() => {
     if (!motion) return;
@@ -193,43 +172,19 @@ function Plate({ stage, motion, side, onReady }) {
     return () => window.removeEventListener("pointermove", onMove);
   }, [motion]);
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     const dt = Math.min(delta, 0.05);
-    // Re-measure now and then: fonts, language and window size all move the placeholder
-    if (frames.current++ % 15 === 0 || !layout.current) measure();
-    if (!layout.current) return;
-    const { width: vw, height: vh } = state.viewport;
-    const scale = (layout.current.size * 0.86 * vh) / (2 * RADIUS);
-    const homeX = (layout.current.x - 0.5) * vw;
-    const homeY = (0.5 - layout.current.y) * vh;
-
-    if (motion) {
-      intro.current = Math.min(1, intro.current + dt / 1.7);
-      idle.current += dt;
-    } else {
-      intro.current = 1;
-    }
-    const eased = 1 - Math.pow(1 - intro.current, 3);
-    // Rolls in from the edge of the screen: the distance travelled turns the plate like a wheel
-    const startX = side * (vw / 2 + RADIUS * scale * 1.1);
-    const x = startX + (homeX - startX) * eased;
-    // Comes to rest with "1 ST" level, then rocks gently so the print stays readable
-    const sway = Math.sin(idle.current * 0.45) * 0.14 * eased * side;
-    spin.current.rotation.y = sway - (x - homeX) / (RADIUS * scale);
-
-    const scroll = motion ? Math.min(1, window.scrollY / window.innerHeight) : 0;
-    const turnY = -0.5 * side + (motion ? pointer.current.x * 0.3 : 0);
-    const turnX = -0.08 - (motion ? pointer.current.y * 0.18 : 0) - scroll * 0.5;
+    if (motion) time.current += dt;
+    // Turned toward the headline, swaying like a plate hanging on a peg
+    const turnY = side * (-0.38 + Math.sin(time.current * 0.55) * 0.32) + (motion ? pointer.current.x * 0.22 : 0);
+    const turnX = -0.1 - (motion ? pointer.current.y * 0.14 : 0);
     const g = tilt.current;
     if (motion) {
-      g.rotation.y = THREE.MathUtils.damp(g.rotation.y, turnY, 4, dt);
-      g.rotation.x = THREE.MathUtils.damp(g.rotation.x, turnX, 4, dt);
+      g.rotation.y = THREE.MathUtils.damp(g.rotation.y, turnY, 3, dt);
+      g.rotation.x = THREE.MathUtils.damp(g.rotation.x, turnX, 3, dt);
     } else {
       g.rotation.set(turnX, turnY, 0);
     }
-    g.position.set(x, homeY + scroll * vh * 0.25, 0);
-    g.scale.setScalar(scale);
-
     if (!reported.current) {
       reported.current = true;
       onReady?.();
@@ -240,114 +195,49 @@ function Plate({ stage, motion, side, onReady }) {
     <group ref={tilt}>
       {/* Stand the plate up: its axle runs toward the camera */}
       <group rotation-x={Math.PI / 2}>
-        <group ref={spin}>
-          <mesh geometry={rubber}>
-            <meshPhysicalMaterial color="#0e0e0e" roughness={0.36} metalness={0.3} clearcoat={1} clearcoatRoughness={0.16} />
-          </mesh>
-          <mesh geometry={steel}>
-            <meshStandardMaterial color="#d9d9d9" metalness={1} roughness={0.2} />
-          </mesh>
-          {/* Printed face and the yellow band on the rim */}
-          <mesh position-y={0.1162} rotation-x={-Math.PI / 2}>
-            <ringGeometry args={[DECAL_INNER, DECAL_OUTER, 160]} />
-            <meshStandardMaterial
-              map={face}
-              emissiveMap={face}
-              emissive={YELLOW}
-              emissiveIntensity={0.4}
-              transparent
-              depthWrite={false}
-              roughness={0.45}
-              polygonOffset
-              polygonOffsetFactor={-2}
-            />
-          </mesh>
-          <mesh position-y={0.1712} rotation-x={-Math.PI / 2}>
-            <ringGeometry args={[1.48, 1.535, 160]} />
-            <meshStandardMaterial color={YELLOW} emissive={YELLOW} emissiveIntensity={0.55} roughness={0.4} />
-          </mesh>
-        </group>
+        <mesh geometry={rubber}>
+          <meshPhysicalMaterial color="#0e0e0e" roughness={0.36} metalness={0.3} clearcoat={1} clearcoatRoughness={0.16} />
+        </mesh>
+        <mesh geometry={steel}>
+          <meshStandardMaterial color="#d9d9d9" metalness={1} roughness={0.2} />
+        </mesh>
+        {/* Printed face and the yellow band on the rim */}
+        <mesh position-y={0.1162} rotation-x={-Math.PI / 2}>
+          <ringGeometry args={[DECAL_INNER, DECAL_OUTER, 160]} />
+          <meshStandardMaterial
+            map={face}
+            emissiveMap={face}
+            emissive={YELLOW}
+            emissiveIntensity={0.4}
+            transparent
+            depthWrite={false}
+            roughness={0.45}
+            polygonOffset
+            polygonOffsetFactor={-2}
+          />
+        </mesh>
+        <mesh position-y={0.1712} rotation-x={-Math.PI / 2}>
+          <ringGeometry args={[1.48, 1.535, 160]} />
+          <meshStandardMaterial color={YELLOW} emissive={YELLOW} emissiveIntensity={0.55} roughness={0.4} />
+        </mesh>
       </group>
     </group>
   );
 }
 
-function dotTexture() {
-  const canvas = document.createElement("canvas");
-  canvas.width = canvas.height = 64;
-  const ctx = canvas.getContext("2d");
-  const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-  g.addColorStop(0, "rgba(255,255,255,1)");
-  g.addColorStop(0.4, "rgba(255,255,255,0.35)");
-  g.addColorStop(1, "rgba(255,255,255,0)");
-  ctx.fillStyle = g;
-  ctx.fillRect(0, 0, 64, 64);
-  return new THREE.CanvasTexture(canvas);
-}
-
-// Chalk dust drifting up through the light
-function Dust({ motion, light, count = 240 }) {
-  const points = useRef(null);
-  const sprite = useMemo(dotTexture, []);
-  useEffect(() => () => sprite.dispose(), [sprite]);
-  const { positions, speeds } = useMemo(() => {
-    const positions = new Float32Array(count * 3);
-    const speeds = new Float32Array(count);
-    for (let i = 0; i < count; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 9;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 6;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 4;
-      speeds[i] = 0.05 + Math.random() * 0.14;
-    }
-    return { positions, speeds };
-  }, [count]);
-
-  useFrame((state, delta) => {
-    if (!motion) return;
-    const dt = Math.min(delta, 0.05);
-    const attr = points.current.geometry.attributes.position;
-    const time = state.clock.elapsedTime;
-    for (let i = 0; i < count; i++) {
-      attr.array[i * 3 + 1] += speeds[i] * dt;
-      attr.array[i * 3] += Math.sin(time * 0.4 + i) * 0.0009;
-      if (attr.array[i * 3 + 1] > 3) attr.array[i * 3 + 1] = -3;
-    }
-    attr.needsUpdate = true;
-  });
-
-  return (
-    <points ref={points}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-      </bufferGeometry>
-      <pointsMaterial
-        map={sprite}
-        size={0.05}
-        sizeAttenuation
-        transparent
-        depthWrite={false}
-        color={light ? "#7a5900" : "#ffe7a3"}
-        opacity={light ? 0.45 : 0.7}
-        blending={light ? THREE.NormalBlending : THREE.AdditiveBlending}
-      />
-    </points>
-  );
-}
-
-export default function PlateScene({ stage, motion, active, dir, theme, onReady }) {
-  // In right-to-left pages the plate sits on the left, so it rolls in and turns the other way
+export default function PlateScene({ motion, active, dir, onReady }) {
+  // In right-to-left pages the card sits on the other side, so the plate turns the other way
   const side = dir === "rtl" ? -1 : 1;
   return (
     <Canvas
-      dpr={[1, 1.5]}
-      camera={{ position: [0, 0, 6.7], fov: 30 }}
+      dpr={[1, 2]}
+      camera={{ position: [0, 0, 6.3], fov: 32 }}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       frameloop={motion && active ? "always" : "demand"}
     >
       <StudioLights side={side} />
       <directionalLight position={[3, 4, 5]} intensity={0.7} />
-      <Plate key={side} stage={stage} motion={motion} side={side} onReady={onReady} />
-      <Dust motion={motion} light={theme === "light"} />
+      <Plate key={side} motion={motion} side={side} onReady={onReady} />
     </Canvas>
   );
 }

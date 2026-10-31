@@ -25,11 +25,12 @@ export const STRINGS = {
     "motion.off": "Off",
 
     "cta.whatsapp": "Message “START” on WhatsApp",
-    "cta.whatsappShort": "WhatsApp",
+    "cta.join": "Join now",
     "cta.call": "Call",
     "cta.directions": "Get directions",
     "cta.openMaps": "Open in Google Maps",
 
+    "photo.sample": "Sample photo",
     "tbc.added": "To be added",
     "tbc.confirm": "To be confirmed",
     "tbc.addedWhat": "{what} to be added",
@@ -43,16 +44,20 @@ export const STRINGS = {
     "aud.kids": "Kids",
 
     "months": { one: "{n} month", other: "{n} months" },
+    "monthsUnit": { one: "month", other: "months" },
     "freeMonths": { one: "{n} free month", other: "{n} free months" },
     "egp": "EGP {n}",
 
     "home.title": "Train hard. Get results. No excuses.",
+    "hero.kicker": "Zagazig, open 7 days a week",
     "hero.line1": "Train hard.",
     "hero.line2": "Get results.",
     "hero.line3": "No excuses.",
     "hero.lede": "Build muscle, burn fat and gain confidence, with expert coaching and real follow-up. A fully equipped gym in Zagazig, open 7 days a week.",
     "hero.seeClasses": "Browse classes",
     "hero.note": "Send the word START to claim the current offer.",
+    "card.title": "Send START",
+    "card.sub": "Get the current offer on WhatsApp",
 
     "fact.open": "Open 7 days a week",
     "fact.where": "Hay El Mostasharin, Zagazig",
@@ -60,17 +65,19 @@ export const STRINGS = {
     "fact.inbody": "InBody body scans",
 
     "inside.title": "Not just a gym",
-    "inside.lede": "Train, recover and take care of the practical things, all in one place.",
+    "quote.text": "Our goal isn't profit alone. It's that every member is happy with every service we give them.",
+    "quote.by": "The First Gym",
     "group.train": "Train",
     "group.recover": "Recover",
     "group.practical": "Practical",
 
     "gallery.title": "Inside the gym",
-    "gallery.empty": "Photos of the gym will go here.",
-    "gallery.instagram": "See the gym on Instagram",
 
     "teaser.classesTitle": "Classes for men, women and kids",
     "teaser.classesLink": "Timetable and all classes",
+    "picker.label": "Classes",
+    "picker.ask": "Ask about this class",
+    "picker.message": "START\nI'd like to ask about the {name} class.",
 
     "challenges.title": "Strength challenges with real prizes",
     "challenges.lede": "The gym runs in-house challenges with cash prizes and free months. Members enter free.",
@@ -86,6 +93,13 @@ export const STRINGS = {
     "teaser.plansTitle": "Choose how long to commit",
     "teaser.plansLede": "Plans run for 1, 3, 6 or 12 months. Recent offers added free months to the longer plans and discounts for women.",
     "teaser.plansLink": "Find your plan",
+    "labTeaser.title": "Know your numbers",
+    "labTeaser.text": "Work out your BMI, daily calories and protein here, then measure muscle, fat and water with the gym's InBody scan.",
+    "labTeaser.open": "Open Body Lab",
+    "tomorrow.before": "Still saying “I'll start",
+    "tomorrow.word": "tomorrow",
+    "tomorrow.after": "”?",
+    "tomorrow.title": "Tomorrow is here.",
 
     "visit.teaserTitle": "Find the gym",
 
@@ -103,7 +117,6 @@ export const STRINGS = {
 
     "membership.title": "Membership",
     "membership.lede": "Four plan lengths. Prices change with the gym's offers, so message START to get today's price.",
-    "plan.choose": "Plan length",
     "plan.price": "Price",
     "plan.payment": "Pay by card or cash.",
     "plan.offers": "Offers change often. Recent ones included up to 25% off for women and a yearly deal for 3 friends who join together.",
@@ -149,7 +162,6 @@ export const STRINGS = {
     "coaches.title": "Coaches",
     "coaches.lede": "Male and female coaches work the floor with you, following up and correcting every exercise, with no personal-training subscription needed.",
     "coaches.classes": "Classes",
-    "coaches.photoTbc": "Photo",
     "coaches.more": "The rest of the team",
 
     "lab.title": "Body Lab",
@@ -238,11 +250,12 @@ export const STRINGS = {
     "motion.off": "متوقفة",
 
     "cta.whatsapp": "راسلونا بكلمة «START» على واتساب",
-    "cta.whatsappShort": "واتساب",
+    "cta.join": "اشتركوا الآن",
     "cta.call": "اتصال",
     "cta.directions": "الاتجاهات إلى الجيم",
     "cta.openMaps": "الفتح في خرائط Google",
 
+    "photo.sample": "صورة توضيحية",
     "tbc.added": "قيد الإضافة",
     "tbc.confirm": "بانتظار التأكيد",
     "tbc.addedWhat": "{what} قيد الإضافة",
@@ -256,16 +269,20 @@ export const STRINGS = {
     "aud.kids": "أطفال",
 
     "months": { one: "شهر", two: "شهران", few: "{n} شهور", other: "{n} شهرًا" },
+    "monthsUnit": { one: "شهر", two: "شهر", few: "شهور", other: "شهرًا" },
     "freeMonths": { one: "شهر مجاني", two: "شهران مجانًا", few: "{n} شهور مجانًا", other: "{n} شهرًا مجانًا" },
     "egp": "{n} جنيه",
 
     "home.title": "تمرين جاد. نتائج حقيقية. بلا أعذار.",
+    "hero.kicker": "الزقازيق، مفتوح ٧ أيام في الأسبوع",
     "hero.line1": "تمرين جاد.",
     "hero.line2": "نتائج حقيقية.",
     "hero.line3": "بلا أعذار.",
     "hero.lede": "بناء العضلات وحرق الدهون وثقة أكبر بالنفس، مع تدريب محترف ومتابعة حقيقية. جيم متكامل في الزقازيق، مفتوح ٧ أيام في الأسبوع.",
     "hero.seeClasses": "استعراض الكلاسات",
     "hero.note": "أرسلوا كلمة START للحصول على العرض الحالي.",
+    "card.title": "أرسلوا START",
+    "card.sub": "واحصلوا على العرض الحالي عبر واتساب",
 
     "fact.open": "مفتوح ٧ أيام في الأسبوع",
     "fact.where": "حي المستشارين، الزقازيق",
@@ -273,17 +290,19 @@ export const STRINGS = {
     "fact.inbody": "قياس InBody لتكوين الجسم",
 
     "inside.title": "مش مجرد جيم",
-    "inside.lede": "تمرين واستشفاء وكل الخدمات العملية في مكان واحد.",
+    "quote.text": "هدفنا مش مجرد ربح مادي، هدفنا إن كل عملائنا يبقوا راضيين عن أي خدمة بنقدمها لهم.",
+    "quote.by": "The First Gym",
     "group.train": "التمرين",
     "group.recover": "الاستشفاء",
     "group.practical": "الخدمات",
 
     "gallery.title": "من داخل الجيم",
-    "gallery.empty": "هنا ستظهر صور الجيم.",
-    "gallery.instagram": "صور الجيم على إنستجرام",
 
     "teaser.classesTitle": "كلاسات للشباب والسيدات والأطفال",
     "teaser.classesLink": "الجدول وكل الكلاسات",
+    "picker.label": "الكلاسات",
+    "picker.ask": "الاستفسار عن هذا الكلاس",
+    "picker.message": "START\nأرغب في الاستفسار عن كلاس {name}.",
 
     "challenges.title": "تحديات قوة بجوائز حقيقية",
     "challenges.lede": "ينظم الجيم تحديات داخلية بجوائز مالية وشهور مجانية، والدخول مجاني للأعضاء.",
@@ -299,6 +318,13 @@ export const STRINGS = {
     "teaser.plansTitle": "اختاروا مدة الالتزام",
     "teaser.plansLede": "الاشتراك لمدة شهر أو ٣ أو ٦ أو ١٢ شهرًا. العروض الأخيرة أضافت شهورًا مجانية للاشتراكات الأطول وخصومات للسيدات.",
     "teaser.plansLink": "اعرفوا الخطة المناسبة",
+    "labTeaser.title": "اعرفوا أرقامكم",
+    "labTeaser.text": "احسبوا مؤشر كتلة الجسم والسعرات اليومية والبروتين هنا، ثم قيسوا العضلات والدهون والمياه بجهاز InBody في الجيم.",
+    "labTeaser.open": "فتح معمل الجسم",
+    "tomorrow.before": "لسه بتقولوا «هنبدأ من",
+    "tomorrow.word": "بكرة",
+    "tomorrow.after": "»؟",
+    "tomorrow.title": "بكرة جه خلاص.",
 
     "visit.teaserTitle": "مكان الجيم",
 
@@ -316,7 +342,6 @@ export const STRINGS = {
 
     "membership.title": "الاشتراكات",
     "membership.lede": "أربع مدد للاشتراك. الأسعار تتغير مع عروض الجيم، لذلك أرسلوا كلمة START لمعرفة سعر اليوم.",
-    "plan.choose": "مدة الاشتراك",
     "plan.price": "السعر",
     "plan.payment": "الدفع بالفيزا أو كاش.",
     "plan.offers": "العروض تتجدد باستمرار، ومنها مؤخرًا خصم للسيدات يصل إلى ٢٥٪ وعرض سنوي لثلاثة أصدقاء يشتركون معًا.",
@@ -362,7 +387,6 @@ export const STRINGS = {
     "coaches.title": "الكباتن",
     "coaches.lede": "كباتن رجال وسيدات معكم في الصالة، بمتابعة وتصحيح لكل تمرين، بدون الحاجة إلى اشتراك تدريب شخصي.",
     "coaches.classes": "الكلاسات",
-    "coaches.photoTbc": "الصورة",
     "coaches.more": "باقي الفريق",
 
     "lab.title": "معمل الجسم",

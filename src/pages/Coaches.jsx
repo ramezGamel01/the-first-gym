@@ -1,10 +1,9 @@
 import { Link } from "react-router";
 import { useI18n, usePageTitle } from "../i18n/context.js";
 import { COACHES, PROGRAMS } from "../data/gym.js";
-import { ProgramTimes, Tbc } from "../components/bits.jsx";
-
-// First letter of the coach's name without the "Capt." title, for the photo placeholder
-const initial = (name) => name.replace(/^(Capt\.|كابتن)\s*/, "").charAt(0);
+import PageHead from "../components/PageHead.jsx";
+import { COACH_PHOTOS, PAGE_PHOTOS } from "../lib/photos.js";
+import { ProgramTimes, SampleTag, Tbc } from "../components/bits.jsx";
 
 export default function Coaches() {
   const { t, pick } = useI18n();
@@ -12,12 +11,7 @@ export default function Coaches() {
 
   return (
     <>
-      <header className="page-head">
-        <div className="shell">
-          <h1 tabIndex={-1}>{t("coaches.title")}</h1>
-          <p>{t("coaches.lede")}</p>
-        </div>
-      </header>
+      <PageHead title={t("coaches.title")} lede={t("coaches.lede")} photo={PAGE_PHOTOS.coaches} />
 
       <section className="section" aria-label={t("coaches.title")}>
         <div className="shell">
@@ -25,19 +19,20 @@ export default function Coaches() {
             {COACHES.map((coach) => {
               const name = pick(coach.name);
               const programs = PROGRAMS.filter((p) => p.coach === coach.id);
+              const photo = coach.photo ?? COACH_PHOTOS[coach.id];
               return (
                 <li className="coach" key={coach.id}>
                   <div className="coach__photo">
-                    {coach.photo ? (
-                      <img src={coach.photo} alt={name} loading="lazy" decoding="async" />
-                    ) : (
-                      <>
-                        <span className="coach__initial" aria-hidden="true">
-                          {initial(name)}
-                        </span>
-                        <Tbc what={t("coaches.photoTbc")} />
-                      </>
-                    )}
+                    <img
+                      className={coach.photo ? undefined : "graded"}
+                      src={photo}
+                      width="800"
+                      height="1000"
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    {!coach.photo && <SampleTag />}
                   </div>
                   <div className="coach__info">
                     <h2 className="coach__name">{name}</h2>

@@ -16,6 +16,12 @@ export function Tbc({ what, kind = "added" }) {
   );
 }
 
+// Marks a placeholder photo, so nobody takes it for the gym's own
+export function SampleTag() {
+  const { t } = useI18n();
+  return <span className="sample-tag">{t("photo.sample")}</span>;
+}
+
 export function ExtLink({ href, className, children, ...rest }) {
   const { t } = useI18n();
   return (

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { PrefsContext } from "./prefs-context.js";
 import { store } from "../lib/storage.js";
 
-const THEME_COLOR = { dark: "#000000", light: "#e6e5e0" };
+const THEME_COLOR = { dark: "#121110", light: "#ebe8e2" };
 
 export function PrefsProvider({ children }) {
   const root = document.documentElement;

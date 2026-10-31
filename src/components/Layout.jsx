@@ -6,6 +6,8 @@ import { usePrefs } from "../state/prefs-context.js";
 import { GYM } from "../data/gym.js";
 import { facebookHref, instagramHref, telHref, whatsappHref } from "../lib/contact.js";
 import PlateMark from "./PlateMark.jsx";
+import Stencil from "./Stencil.jsx";
+import { PHOTOS } from "../lib/photos.js";
 import { ExtLink, FacebookIcon, InstagramIcon, WhatsAppIcon } from "./bits.jsx";
 
 const NAV = [
@@ -21,8 +23,17 @@ export default function Layout({ children }) {
   const { theme, toggleTheme, motion, toggleMotion } = usePrefs();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuButton = useRef(null);
+  const [scrolled, setScrolled] = useState(false);
   const { pathname, hash } = useLocation();
   const firstRender = useRef(true);
+
+  // The header floats over the opening photo, then turns solid once the page scrolls
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // After navigating: jump to the top (or the linked section) and move focus to the new page's heading
   useEffect(() => {
@@ -63,7 +74,7 @@ export default function Layout({ children }) {
       <a className="skip" href="#main">
         {t("skip")}
       </a>
-      <header className="site-header">
+      <header className={`site-header${scrolled || menuOpen ? " is-solid" : ""}`}>
         <div className="site-header__inner shell">
           <Link to="/" className="brand" aria-label={t("brand.home")} onClick={closeMenu}>
             <PlateMark className="brand__plate" detail={false} />
@@ -114,7 +125,7 @@ export default function Layout({ children }) {
             </button>
             <ExtLink className="btn btn--volt btn--sm header-cta" href={whatsappHref(GYM.offerWord)}>
               <WhatsAppIcon />
-              <span className="header-cta__text">{t("cta.whatsappShort")}</span>
+              {t("cta.join")}
             </ExtLink>
             <button
               type="button"
@@ -138,6 +149,10 @@ export default function Layout({ children }) {
           <div className="site-footer__brand">
             <PlateMark className="site-footer__plate" />
             <p className="site-footer__tagline">{pick(GYM.tagline)}</p>
+            <ExtLink className="btn btn--volt" href={whatsappHref(GYM.offerWord)}>
+              <WhatsAppIcon />
+              {t("cta.whatsapp")}
+            </ExtLink>
           </div>
           <nav aria-labelledby="footer-explore">
             <h2 id="footer-explore">{t("footer.explore")}</h2>
@@ -195,6 +210,10 @@ export default function Layout({ children }) {
             </span>
             {t("motion.label")}
           </button>
+        </div>
+        <div className="footer-mark" aria-hidden="true">
+          <img src={PHOTOS.boxing.src} width={PHOTOS.boxing.width} height={PHOTOS.boxing.height} alt="" loading="lazy" decoding="async" />
+          <Stencil text="BE THE FIRST" />
         </div>
       </footer>
     </>

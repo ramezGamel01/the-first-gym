@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useI18n, usePageTitle } from "../i18n/context.js";
 import { AUDIENCES, PROGRAMS } from "../data/gym.js";
+import PageHead from "../components/PageHead.jsx";
+import { PAGE_PHOTOS } from "../lib/photos.js";
 import ProgramList from "../components/Programs.jsx";
 import Timetable from "../components/Timetable.jsx";
 
@@ -12,12 +14,7 @@ export default function Classes() {
 
   return (
     <>
-      <header className="page-head">
-        <div className="shell">
-          <h1 tabIndex={-1}>{t("classes.title")}</h1>
-          <p>{t("classes.lede")}</p>
-        </div>
-      </header>
+      <PageHead title={t("classes.title")} lede={t("classes.lede")} photo={PAGE_PHOTOS.classes} />
 
       <section className="section" aria-label={t("nav.classes")}>
         <div className="shell">

@@ -1,37 +1,65 @@
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Link } from "react-router";
-import { MapPin, ScanLine, UserCheck, CalendarDays } from "lucide-react";
 import { useI18n } from "../i18n/context.js";
 import { usePrefs } from "../state/prefs-context.js";
 import { GYM } from "../data/gym.js";
+import { PHOTOS } from "../lib/photos.js";
 import { whatsappHref } from "../lib/contact.js";
-import { hasWebGL, SceneBoundary, useOnScreen } from "../three/SceneGuard.jsx";
-import PlateMark from "./PlateMark.jsx";
+import Stencil from "./Stencil.jsx";
+import PlateCard from "./PlateCard.jsx";
 import { ExtLink, WhatsAppIcon } from "./bits.jsx";
 
-// three.js only loads with the hero, in its own chunk
-const PlateScene = lazy(() => import("../three/PlateScene.jsx"));
-
+// Full-bleed photo that flickers on like the gym's lights, the gym's tagline, and its name
+// cut out of the band at the bottom so the photo shows through the letters.
 export default function Hero() {
-  const { t, dir } = useI18n();
-  const { motion, theme } = usePrefs();
-  const stage = useRef(null);
-  const onScreen = useOnScreen(stage);
-  const [webgl] = useState(hasWebGL);
-  const [mounted, setMounted] = useState(false);
-  const [ready, setReady] = useState(false);
+  const { t, pick } = useI18n();
+  const { motion } = usePrefs();
+  const hero = useRef(null);
 
-  // Mount the scene the first time the stage scrolls into view, then keep it
+  // The photo drifts slower than the page, so the stencil letters slide across it
   useEffect(() => {
-    if (onScreen && webgl) setMounted(true);
-  }, [onScreen, webgl]);
+    const el = hero.current;
+    if (!motion || !el) return;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      el.style.setProperty("--shift", `${(Math.min(window.scrollY, el.offsetHeight) * 0.28).toFixed(1)}px`);
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(frame);
+      el.style.removeProperty("--shift");
+    };
+  }, [motion]);
 
+  const photo = PHOTOS.boxing;
   const lines = [t("hero.line1"), t("hero.line2"), t("hero.line3")];
 
   return (
-    <section className="hero" aria-labelledby="hero-title">
-      <div className="shell hero__grid">
+    <section className="hero island" ref={hero} aria-labelledby="hero-title">
+      <div className="hero__media">
+        <img
+          className="hero__photo"
+          src={photo.src}
+          width={photo.width}
+          height={photo.height}
+          alt={pick(photo.alt)}
+          fetchPriority="high"
+        />
+        <span className="hero__lights" aria-hidden="true" />
+      </div>
+
+      <div className="shell hero__inner">
         <div className="hero__copy">
+          <p className="hero__kicker">
+            <span className="hero__dot" aria-hidden="true" />
+            {t("hero.kicker")}
+          </p>
           <h1 id="hero-title" className="hero__title" tabIndex={-1}>
             {lines.map((line, i) => (
               <span className="hero__line" key={i}>
@@ -51,51 +79,10 @@ export default function Hero() {
           </div>
           <p className="hero__note">{t("hero.note")}</p>
         </div>
-
-        {/* Holds the plate's place in the layout; the flat drawing shows until the 3D plate is ready */}
-        <div className="hero__stage" ref={stage} aria-hidden="true">
-          <PlateMark className={`hero__poster${ready ? " is-hidden" : ""}`} />
-        </div>
+        <PlateCard />
       </div>
 
-      {/* The canvas spans the whole hero so the plate can roll in from the edge of the screen */}
-      {mounted && (
-        <div className="hero__scene" aria-hidden="true">
-          <SceneBoundary fallback={null}>
-            <Suspense fallback={null}>
-              <PlateScene
-                stage={stage}
-                motion={motion}
-                active={onScreen}
-                dir={dir}
-                theme={theme}
-                onReady={() => setReady(true)}
-              />
-            </Suspense>
-          </SceneBoundary>
-        </div>
-      )}
-
-      <div className="facts">
-        <ul className="shell facts__list">
-          <li>
-            <CalendarDays aria-hidden="true" strokeWidth={1.75} />
-            {t("fact.open")}
-          </li>
-          <li>
-            <MapPin aria-hidden="true" strokeWidth={1.75} />
-            {t("fact.where")}
-          </li>
-          <li>
-            <UserCheck aria-hidden="true" strokeWidth={1.75} />
-            {t("fact.coaches")}
-          </li>
-          <li>
-            <ScanLine aria-hidden="true" strokeWidth={1.75} />
-            {t("fact.inbody")}
-          </li>
-        </ul>
-      </div>
+      <Stencil text="THE FIRST" className="hero__stencil" />
     </section>
   );
 }

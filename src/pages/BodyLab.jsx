@@ -3,6 +3,8 @@ import { ScanLine } from "lucide-react";
 import { useI18n, usePageTitle } from "../i18n/context.js";
 import { ACTIVITY, BMI_BANDS, bmi, bmiBand, check, dailyCalories, LIMITS, proteinRange } from "../lib/body.js";
 import { whatsappHref } from "../lib/contact.js";
+import PageHead from "../components/PageHead.jsx";
+import { PAGE_PHOTOS } from "../lib/photos.js";
 import { ExtLink } from "../components/bits.jsx";
 
 const SCALE = { min: 15, max: 40 };
@@ -101,12 +103,7 @@ export default function BodyLab() {
 
   return (
     <>
-      <header className="page-head">
-        <div className="shell">
-          <h1 tabIndex={-1}>{t("lab.title")}</h1>
-          <p>{t("lab.lede")}</p>
-        </div>
-      </header>
+      <PageHead title={t("lab.title")} lede={t("lab.lede")} photo={PAGE_PHOTOS.bodyLab} />
 
       <section className="section" aria-label={t("lab.title")}>
         <div className="shell lab">

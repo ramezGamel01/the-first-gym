@@ -21,10 +21,39 @@ describe("home page", () => {
     expect(document.title).toBe("The First Gym | Train hard. Get results. No excuses.");
   });
 
-  it("marks the empty gallery instead of showing stock photos", () => {
+  it("opens on the photo with the gym's name cut out below it, and skips the gallery until there are photos", () => {
+    const { container } = renderAt("/");
+    expect(screen.getByRole("img", { name: /athletes in a gym/ })).toBeInTheDocument();
+    expect(container.querySelector(".hero .stencil__text")).toHaveTextContent("THE FIRST");
+    expect(screen.queryByRole("heading", { name: "Inside the gym" })).not.toBeInTheDocument();
+  });
+});
+
+describe("class picker", () => {
+  it("shows the chosen class with its coach and a WhatsApp question about it", async () => {
+    const user = userEvent.setup();
     renderAt("/");
-    expect(screen.getByText("Photos of the gym will go here.")).toBeInTheDocument();
-    expect(screen.queryAllByRole("img")).toHaveLength(0);
+    const tablist = screen.getByRole("tablist", { name: "Classes" });
+    expect(within(tablist).getAllByRole("tab")).toHaveLength(7);
+    await user.click(within(tablist).getByRole("tab", { name: /Kickboxing/ }));
+    const panel = screen.getByRole("tabpanel");
+    expect(within(panel).getByRole("heading", { name: "Kickboxing" })).toBeInTheDocument();
+    expect(panel).toHaveTextContent("Capt. Mohamed Tamer");
+    expect(within(panel).getByRole("link", { name: /Ask about this class/ }).getAttribute("href")).toContain(
+      encodeURIComponent("the Kickboxing class")
+    );
+  });
+
+  it("moves between classes with the arrow keys", async () => {
+    const user = userEvent.setup();
+    renderAt("/");
+    const tabs = within(screen.getByRole("tablist", { name: "Classes" })).getAllByRole("tab");
+    tabs[0].focus();
+    await user.keyboard("{ArrowDown}");
+    expect(tabs[1]).toHaveFocus();
+    expect(tabs[1]).toHaveAttribute("aria-selected", "true");
+    await user.keyboard("{End}");
+    expect(tabs[6]).toHaveAttribute("aria-selected", "true");
   });
 });
 
@@ -85,16 +114,16 @@ describe("classes", () => {
 });
 
 describe("membership", () => {
-  it("shows the four plan lengths with the price marked as not yet added", async () => {
-    const user = userEvent.setup();
+  it("shows the four plan lengths with their months lit and prices marked as not yet added", () => {
     const { container } = renderAt("/membership");
-    const rack = container.querySelector(".rack");
-    expect(within(rack).getAllByRole("radio")).toHaveLength(4);
-    await user.click(within(rack).getByRole("radio", { name: "12 months" }));
-    const card = container.querySelector(".plan-card");
-    expect(card).toHaveTextContent("12 months");
-    expect(within(card).getByText("To be added")).toBeInTheDocument();
-    expect(within(card).getByRole("link", { name: /Ask about this plan/ }).getAttribute("href")).toContain(
+    const cards = container.querySelectorAll(".plan");
+    expect(cards).toHaveLength(4);
+    expect(cards[0].querySelectorAll(".plan__cells .is-on")).toHaveLength(1);
+    const year = cards[3];
+    expect(year).toHaveTextContent("12 months");
+    expect(year.querySelectorAll(".plan__cells .is-on")).toHaveLength(12);
+    expect(within(year).getByText("To be added")).toBeInTheDocument();
+    expect(within(year).getByRole("link", { name: /Ask about this plan/ }).getAttribute("href")).toContain(
       encodeURIComponent("the 12 months plan")
     );
   });
